@@ -15,6 +15,7 @@ int analogvoltagevalue = 0;
 int pressure = 0;
 int voltage = 0;
 int enablestate = 0;
+int pressurestate = 1;
 Servo compressor;
 
 void setup()
@@ -22,7 +23,8 @@ void setup()
   pinMode(switch1, INPUT);
   pinMode(switch2, INPUT);
   pinMode(voltagepin, INPUT);
-  pinMode(pressuresensor, INPUT);  pinMode(solenoid1F, OUTPUT);
+  pinMode(pressuresensor, INPUT); 
+  pinMode(solenoid1F, OUTPUT);
   pinMode(solenoid1R, OUTPUT);
   pinMode(solenoid2F, OUTPUT);
   pinMode(solenoid2R, OUTPUT);
@@ -41,6 +43,15 @@ void loop()
   // read and calculate pressure
   analogpressurevalue = analogRead(pressuresensor);
   pressure = analogpressurevalue * .1953125;
+  Serial.println(pressure);
+  
+  //set pressure switch state
+  if(pressure > 110){
+    pressurestate = 0;
+  }
+  if(pressure < 85){
+    pressurestate = 1;
+  }
 
   //read and calculate voltage
   analogvoltagevalue = analogRead(voltagepin);
@@ -55,7 +66,7 @@ void loop()
   }
 
   //set compressor state
-  if( pressure < 115 && enablestate == 1){
+  if( pressurestate == 1 && enablestate == 1){
     compressor.writeMicroseconds(2000);
   }
   else{
