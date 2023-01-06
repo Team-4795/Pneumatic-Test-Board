@@ -2,7 +2,6 @@
 const int switch1 = 2;
 const int switch2 = 4;
 const int pressuresensor = A0;
-const int voltagepin = A1;
 const int enablepin = 12;
 const int solenoid1F = 7;
 const int solenoid1R = 8;
@@ -11,10 +10,8 @@ const int solenoid2R = 10;
 int switch1state = 0;
 int switch2state = 0;
 float analogpressurevalue = 0;
-int analogvoltagevalue = 0;
-float voltagepressure = 0;
-int pressure = 0;
 float voltage = 0;
+int pressure = 0;
 int enablestate = 0;
 int pressurestate = 1;
 Servo compressor;
@@ -24,7 +21,6 @@ void setup()
 {
   pinMode(switch1, INPUT_PULLUP);
   pinMode(switch2, INPUT_PULLUP);
-  pinMode(voltagepin, INPUT);
   pinMode(pressuresensor, INPUT); 
   pinMode(solenoid1F, OUTPUT);
   pinMode(solenoid1R, OUTPUT);
@@ -56,8 +52,8 @@ void loop()
 
   // read and calculate pressure
   analogpressurevalue = analogRead(pressuresensor);
-  voltagepressure = analogpressurevalue / 204.6;
-  pressure = (250 * (voltagepressure / 4.949) - 18); 
+  voltage = analogpressurevalue / 204.6;
+  pressure = (250 * (voltage / 4.949) - 18); 
   //set pressure switch state
   if(pressure > 90){
     pressurestate = 0;
